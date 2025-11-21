@@ -2,16 +2,27 @@
 """
 adaptive_protection_test.py
 
-Load generator podobny do wrk, z opcją użycia curl_cffi (impersonate) by zbliżyć JA3/TLS.
-Dodano twarde utrzymywanie RPS: --hard-rps (sloty czasowe).
+Load generator similar to wrk, with an option to use curl_cffi (impersonation)
+to better align JA3/TLS fingerprints.
+Includes strict RPS control via the --hard-rps flag (time-slot based scheduling).
 
 Usage examples:
-# thread mode using curl_cffi (najbliżej wrk jeśli chcesz impersonate/JA3)
-python loadgen_wrk_like.py --url https://account.box.com --path /login --rps 1000 --connections 100 --duration 120 --user-agent "Kuba-Test-Adaptive-Protection" --mode thread --use-curlcffi --hard-rps
 
-# async mode (httpx)
-python loadgen_wrk_like.py --url https://account.box.com --path /login --rps 400 --connections 12 --duration 120 --user-agent "Kuba-Test-Adaptive-Protection" --mode async --http2 --hard-rps
+# Thread mode using curl_cffi (closest to wrk if you want JA3 impersonation)
+python adaptive_protection_test.py \
+  --url https://account.box.com --path /login \
+  --rps 1000 --connections 100 --duration 120 \
+  --user-agent "Kuba-Test-Adaptive-Protection" \
+  --mode thread --use-curlcffi --hard-rps
+
+# Async mode (httpx)
+python adaptive_protection_test.py \
+  --url https://account.box.com --path /login \
+  --rps 400 --connections 12 --duration 120 \
+  --user-agent "Kuba-Test-Adaptive-Protection" \
+  --mode async --http2 --hard-rps
 """
+
 import argparse
 import time
 import random
